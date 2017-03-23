@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖游戏</title>
+    <style>
+        #box{
+            width:720px;
+            margin:0 auto;
+            margin-top:20px;
+            box-shadow:0px 0px 2px #333;
+        }
+        .pic{
+            width:200px;
+            height:200px;
+            float:left;
+            line-height:200px;
+            margin:10px;
+            border:5px #fff solid;
+            color:blue;
+            font-size: 35px;
+            text-align: center;
+        }
+        .anniu{
+            width:200px;
+            height:200px;
+            float:left;
+            margin:10px;
+        }
+        #drawBtn{
+            color:red;
+            font-size:30px;
+            width:200px;
+            height:200px;
+            box-shadow:0px 0px 2px #333;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        window.onload=init;
+        var setting={
+            count:0,
+            total:0,
+            delay:20,
+            picIndex:[0,1,2,4,7,6,5,3]
+        };
+        function init(){
+            document.getElementById("drawBtn").onclick=function(){
+                setting.count=0;
+                setting.delay=20;
+                this.disable=true;//禁用按钮
+                var drawBtn=this;
+                //获取所有图片的div
+                var allDivs=document.getElementsByClassName("pic");
+                //获得一个随机整数，代表中奖的那个位置，3*8+(0-7)
+                var num=Math.floor(Math.random()*allDivs.length)
+
+                setting.total+=Math.floor(Math.random()*allDivs.length);
+
+                console.log("num="+num)
+                console.log("setting.total="+setting.total)
+                //设置定时器，依次修改每个div边框的颜色.
+                setTimeout(function show(){
+                    drawBtn.disable=true;
+                    //重置上一个边框的颜色
+                    for (var i=0;i<allDivs.length;i++){
+                        allDivs[i].style.borderColor="#fff";
+                        allDivs[i].style.opacity=0.7;
+                    }
+                    //找到要修改的那个边框的颜色设置
+                    var currentPic=allDivs[setting.picIndex[setting.count%8]];
+                    currentPic.style.borderColor="red";
+                    currentPic.style.opacity=1.0;
+                    setting.count++;
+                    setting.delay+=2*setting.count;
+                    if(setting.count>setting.total){
+                        alert(num);
+                        drawBtn.disable=false;
+                        return;
+                    }
+                    setTimeout(show,setting.delay);
+                },setting.delay);
+            }
+        }
+    </script>
+</head>
+<body>
+<div id="box">
+    <div class="pic" id="24474">1</div>
+    <div class="pic" id="24475">2</div>
+    <div class="pic" id="24476">3</div>
+    <div class="pic" id="24477">4</div>
+    <div class="anniu"><input type="button" value="我要抽奖" id="drawBtn"/></div>
+    <div class="pic" id="24478">5</div>
+    <div class="pic" id="24479">6</div>
+    <div class="pic" id="24480">7</div>
+    <div class="pic" id="24481">8</div>
+</div>
+</body>
+</html>
